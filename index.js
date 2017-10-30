@@ -11,8 +11,31 @@ restService.use(bodyParser.urlencoded({
 
 restService.use(bodyParser.json());
 
+function search(nameKey, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].name === nameKey) {
+            return myArray[i].name + "__" + myArray[i].id;
+        }
+    }
+}
+
 restService.post('/echo', function(req, res) {
     var speech = req.body.result && req.body.result.parameters && req.body.result.parameters.echoText ? "Sofi bot test echo - " + req.body.result.parameters.echoText : "Seems like some problem. Speak again."
+    return res.json({
+        speech: speech,
+        displayText: speech,
+        source: 'webhook-echo-sample'
+    });
+});
+
+restService.get('/employee', function(req, res) {
+    
+    var array = [
+    { id:"1", name:"prem", role:"developer", other: "that" },
+    { id:"2", name:"madhu", role:"manager", other: "that" }
+    ];
+
+    var speech = search(req.query.name, array);
     return res.json({
         speech: speech,
         displayText: speech,
